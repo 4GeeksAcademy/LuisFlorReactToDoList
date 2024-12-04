@@ -3,6 +3,8 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const TareasLista = () => {
   const listaInicial = [
@@ -13,12 +15,12 @@ export const TareasLista = () => {
   ];
   const [lista, setLista] = useState(listaInicial);
   const [nuevaTarea, setNuevaTarea] = useState("");
-  const [cursorEncima, setCursorEncima] = useState(null);
+  const [cursorEncima, setCursorEncima] = useState("");
 
   const borrarTarea = (id) => {
     setLista(
-      lista.filter((Element) => {
-        return Element.id !== id;
+      lista.filter((tarea) => {
+        return tarea.id !== id;
       }),
     );
   };
@@ -38,10 +40,11 @@ export const TareasLista = () => {
 
   return (
     <>
+      <h1 className="text-center m-4"> Lista de tareas </h1>
       <div className="d-flex justify-content-center">
         <InputGroup className="mt-4 m-3" style={{ width: "600px" }}>
           <Form.Control
-            placeholder="Añade tus tareas cotidianas"
+            placeholder="Añade tus tareas para hoy"
             value={nuevaTarea}
             onChange={(e) => setNuevaTarea(e.target.value)}
             onKeyUp={manejarTecla}
@@ -51,43 +54,42 @@ export const TareasLista = () => {
           </Button>
         </InputGroup>
       </div>
-      {lista.map((Element) => {
+      {lista.map((tarea) => {
         return (
           <>
             <div
               className="d-flex justify-content-center"
-              onMouseEnter={() => setCursorEncima(Element.id)}
-              onMouseLeave={() => setCursorEncima(null)}
+              onMouseEnter={() => setCursorEncima(tarea.id)}
+              onMouseLeave={() => setCursorEncima("")}
             >
               <div
                 className="m-2 rounded d-flex justify-content-between"
                 style={{
                   width: "600px",
                   border:
-                    cursorEncima === Element.id
+                    cursorEncima === tarea.id
                       ? "2px solid blue"
                       : "1px solid grey",
                 }}
-                key={Element.id}
-                onMouseEnter={() => setCursorEncima(Element.id)}
-                onMouseLeave={() => setCursorEncima(null)}
+                key={tarea.id}
+                onMouseEnter={() => setCursorEncima(tarea.id)}
+                onMouseLeave={() => setCursorEncima("")}
               >
-                <p className="p-2">{Element.tarea}</p>
-                <strong
+                <span className="p-2">{tarea.tarea}</span>
+                <span
                   className="p-2 text-danger"
                   style={{
                     cursor: "pointer",
                     visibility:
-                      cursorEncima === Element.id ? "visible" : "hidden",
-                    pointerEvents:
-                      cursorEncima === Element.id ? "auto" : "none",
+                      cursorEncima === tarea.id ? "visible" : "hidden",
+                    pointerEvents: cursorEncima === tarea.id ? "auto" : "none",
                   }}
                   onClick={() => {
-                    return borrarTarea(Element.id);
+                    return borrarTarea(tarea.id);
                   }}
                 >
-                  X
-                </strong>
+                  <FontAwesomeIcon icon={faTrash} />
+                </span>
               </div>
             </div>
           </>
