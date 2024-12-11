@@ -2,41 +2,71 @@ import React from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 
 export const TareasLista = () => {
-  const listaInicial = [
-    {
-      tarea: "Hacer ejercicio",
-      id: crypto.randomUUID(),
-    },
-  ];
-  const [lista, setLista] = useState(listaInicial);
+  const [lista, setLista] = useState([]);
   const [nuevaTarea, setNuevaTarea] = useState("");
   const [cursorEncima, setCursorEncima] = useState("");
 
+  const getUsuario = () => {
+    fetch("https://playground.4geeks.com/todo/users/LuisFlor7", {
+      method: "GET",
+    })
+      .then((response) => {
+        return response.json();
+      })
+      .then((response) => {
+        setLista(response.todos);
+      });
+  };
+
   const borrarTarea = (id) => {
-    setLista(
-      lista.filter((tarea) => {
-        return tarea.id !== id;
-      }),
-    );
+    fetch(`https://playground.4geeks.com/todo/todos/${id}`, {
+      method: "DELETE",
+    }).then(getUsuario());
   };
 
   const agregarTarea = () => {
     if (nuevaTarea.trim() === "") return;
-    const tareaNueva = { tarea: nuevaTarea, id: crypto.randomUUID() };
-    setLista([...lista, tareaNueva]);
-    setNuevaTarea("");
+    fetch("https://playground.4geeks.com/todo/todos/LuisFlor7", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        label: nuevaTarea,
+        is_done: false,
+      }),
+    }).then(() => {
+      setNuevaTarea("");
+      getUsuario();
+    });
   };
 
   const manejarTecla = (e) => {
     if (e.key === "Enter") {
-      agregarTarea();
+      fetch("https://playground.4geeks.com/todo/todos/LuisFlor7", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          label: nuevaTarea,
+          is_done: false,
+        }),
+      }).then(() => {
+        setNuevaTarea("");
+        getUsuario();
+      });
     }
   };
+
+  useEffect(() => {
+    getUsuario();
+  }, []);
 
   return (
     <>
@@ -75,7 +105,7 @@ export const TareasLista = () => {
                 onMouseEnter={() => setCursorEncima(tarea.id)}
                 onMouseLeave={() => setCursorEncima("")}
               >
-                <span className="p-2">{tarea.tarea}</span>
+                <span className="p-2">{tarea.label}</span>
                 <span
                   className="p-2 text-danger"
                   style={{
