@@ -1,13 +1,17 @@
-import { routeConfig } from "./routeConfig";
+import { NavigateBar } from "./components/Navbar";
+import { Characters } from "./pages/Characters";
+import { Route, Routes } from "react-router";
+import { Films } from "./pages/Films";
+import { Planets } from "./pages/Planets";
 
-import { Routes, Route } from "react-router";
 export const App = () => {
   return (
     <>
+      <NavigateBar />
       <Routes>
-        {routeConfig.map((route) => {
-          return <Route path={route.path} element={route.page} />;
-        })}
+        <Route path="/films" element={<Films />} />
+        <Route path="/people" element={<Characters />} />
+        <Route path="/planets" element={<Planets />} />
       </Routes>
     </>
   );
