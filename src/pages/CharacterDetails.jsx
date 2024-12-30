@@ -28,11 +28,19 @@ export const CharacterDetails = () => {
           <>
             <h2>{characterDetails.name}</h2>
             <p>
+              <strong>Name:</strong> {characterDetails.name}
+            </p>
+            <p>
+              <strong>Gender:</strong> {characterDetails.gender}
+            </p>
+            <p>
+              <strong>Height:</strong> {characterDetails.height}
+            </p>
+            <p>
               <strong>Link:</strong> {characterDetails.url}
             </p>
           </>
         )}
-        {/* Muestra más detalles si es necesario */}
       </div>
     </>
   );

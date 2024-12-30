@@ -27,7 +27,7 @@ export const FilmDetails = () => {
         <>
           <h2>{filmDetails.title}</h2>
           <p>
-            <strong></strong> {filmDetails.opening_crawl} km
+            <strong></strong> {filmDetails.opening_crawl}
           </p>
           <p>
             <strong>Created:</strong> {filmDetails.created}

@@ -43,7 +43,6 @@ export const PlanetDetails = () => {
           </p>
         </>
       )}
-      {/* Muestra más detalles si es necesario */}
     </div>
   );
 };
