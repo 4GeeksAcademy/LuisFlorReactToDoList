@@ -1,49 +1,46 @@
-import React from "react";
 import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrash, faPen } from "@fortawesome/free-solid-svg-icons";
-import { dameUsuario, deleteContacto } from "../fetch";
-import { Container, Row } from "react-bootstrap";
+import { Card, Row, Col, Button } from "react-bootstrap";
+import { useParams, NavLink } from "react-router";
 
 export const ContactList = () => {
   const [lista, setLista] = useState([]);
+  let { slug } = useParams();
 
-  const getUsuario = () => {
-    dameUsuario().then((response) => {
-      setLista(response.agendas);
-    });
-  };
-
-  const borrarContacto = (id) => {
-    deleteContacto(id).then(getUsuario());
-  };
-
+  const fetchContacts = (slug) =>
+    fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts`, {
+      method: "GET",
+    }).then((response) =>
+      response.json().then((data) => {
+        console.log(data);
+        setLista(data.contacts || []);
+      }),
+    );
   useEffect(() => {
-    getUsuario();
-  }, []);
+    fetchContacts(slug);
+  }, [slug]);
 
   return (
     <>
-      <h1 className="text-center m-4"> Lista de agendas </h1>
-      <div className="d-flex justify-content-center">
-        <Container className="d-flex">
-          <Row>
-            <Container className="justifyContentEnd">
-              <span className="p-2 text-danger" onClick={() => {}}>
-                <FontAwesomeIcon icon={faPen} />
-              </span>
-              <span
-                className="p-2 text-danger"
-                onClick={() => {
-                  return borrarContacto();
-                }}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </span>
-            </Container>
-          </Row>
-        </Container>
-      </div>
+      <h1 className="m-4">Contactos de {slug}</h1>
+      <Row>
+        <ul>
+          {lista.map((item) => (
+            <Col sm={6} lg={3} className="m-4">
+              <Card key={item.id} style={{ marginBottom: "1rem" }}>
+                <Card.Body>
+                  <h1>{item.name}</h1>
+                  <p>Teléfono: {item.phone}</p>
+                  <p>Correo electrónico: {item.email}</p>
+                  <p>Dirección: {item.address}</p>
+                </Card.Body>
+                <NavLink to={`/agendas/${item.slug}/editcontact`}>
+                  <Button variant="primary">Edit contact</Button>
+                </NavLink>
+              </Card>
+            </Col>
+          ))}
+        </ul>
+      </Row>
     </>
   );
 };

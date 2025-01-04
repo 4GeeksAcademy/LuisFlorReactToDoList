@@ -1,15 +1,18 @@
 import React, { useState } from "react";
-import { Container, Row, Col, Button, Form } from "react-bootstrap";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import { Container } from "react-bootstrap";
 import { useParams } from "react-router";
+import { NavLink } from "react-router";
 
-const AddContact = () => {
+export const EditContact = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [mail, setMail] = useState("");
   const [address, setAddress] = useState("");
-
   let { slug } = useParams();
-
   const postContact = (e) => {
     const inputsContact = {
       name: name,
@@ -17,6 +20,17 @@ const AddContact = () => {
       email: mail,
       address: address,
     };
+
+    fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts/`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(inputsContact),
+    }).then(() => {
+      setName("");
+      setMail("");
+      setPhone("");
+      setAddress("");
+    });
 
     fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts/`, {
       method: "POST",
@@ -34,6 +48,9 @@ const AddContact = () => {
     <Container className="d-flex justify-content-center align-items-center m-5">
       <Row className="w-100">
         <Col md={6} className="mx-auto">
+          <Button variant="danger" className="p-2 m-2">
+            <NavLink to={`/agendas/${slug}`}>Atrás</NavLink>
+          </Button>
           <Form>
             <Form.Group className="mb-3" controlId="formGroupName">
               <Form.Label>Full Name</Form.Label>
@@ -76,7 +93,7 @@ const AddContact = () => {
             </Form.Group>
 
             <Button variant="primary" type="submit" onClick={postContact}>
-              Save
+              Enviar
             </Button>
           </Form>
         </Col>
@@ -84,5 +101,3 @@ const AddContact = () => {
     </Container>
   );
 };
-
-export default AddContact;

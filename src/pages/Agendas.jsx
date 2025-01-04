@@ -1,44 +1,47 @@
-import { dameAgendas } from "../fetch";
+import { useEffect, useState } from "react";
+import { Card, Button, Row, Col } from "react-bootstrap";
+import { NavLink } from "react-router";
 
 export const Agendas = () => {
-  const [agendas, setAgendas] = useState();
+  const [lista, setLista] = useState([]);
 
-  const añadeAgendas = () => {
-    dameAgendas().then((data) => {
-      setAgendas(data.agendas);
-      console.log(data);
-    });
-  };
-
+  const fetchAgendas = () =>
+    fetch("https://playground.4geeks.com/contact/agendas", {
+      method: "GET",
+    }).then((response) =>
+      response.json().then((data) => {
+        console.log(data);
+        setLista(data.agendas);
+      }),
+    );
   useEffect(() => {
-    añadeAgendas();
+    fetchAgendas();
   }, []);
 
   return (
-    <>
-      <h1 className="text-center m-4"> Lista de agendas </h1>
-      <div className="d-flex justify-content-center">
-        <Container className="d-flex">
-          <Row>
-            {agendas.map((item) => {
-              return <h1> {item.name}</h1>;
-            })}
-            <Container className="justifyContentEnd">
-              <span className="p-2 text-danger" onClick={() => {}}>
-                <FontAwesomeIcon icon={faPen} />
-              </span>
-              <span
-                className="p-2 text-danger"
-                onClick={() => {
-                  return borrarContacto(contact.id);
-                }}
-              >
-                <FontAwesomeIcon icon={faTrash} />
-              </span>
-            </Container>
-          </Row>
-        </Container>
-      </div>
-    </>
+    <Row>
+      {lista.map((item) => (
+        <Col sm={6} lg={3} key={item.slug}>
+          <Card style={{ width: "18rem", marginBottom: "1rem" }}>
+            <Card.Img
+              variant="top"
+              src="https://via.placeholder.com/150"
+              alt="Agenda"
+            />
+            <Card.Body>
+              <Card.Title>{item.slug}</Card.Title>
+              <NavLink to={`/agendas/${item.slug}/contacts`}>
+                <Button variant="primary">More info</Button>
+              </NavLink>
+              <NavLink to={`/agendas/${item.slug}/addcontact`}>
+                <Button variant="primary">Add new contact</Button>
+              </NavLink>
+            </Card.Body>
+          </Card>
+        </Col>
+      ))}
+    </Row>
   );
 };
+
+export default Agendas;
