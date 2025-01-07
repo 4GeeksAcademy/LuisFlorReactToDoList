@@ -14,7 +14,10 @@ export const App = () => {
         <Route path="/" element={<Agendas />} />
         <Route path="/agendas/:slug/contacts" element={<ContactList />} />
         <Route path="/agendas/:slug/addcontact" element={<AddContact />} />
-        <Route path="/agendas/:slug/editcontact" element={<EditContact />} />
+        <Route
+          path="/agendas/:slug/editcontact/:id"
+          element={<EditContact />}
+        />
       </Routes>
     </>
   );

@@ -1,16 +1,17 @@
 import React, { useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 const AddContact = () => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [mail, setMail] = useState("");
   const [address, setAddress] = useState("");
+  const navigate = useNavigate();
 
   let { slug } = useParams();
 
-  const postContact = (e) => {
+  const postContact = () => {
     const inputsContact = {
       name: name,
       phone: phone,
@@ -18,7 +19,7 @@ const AddContact = () => {
       address: address,
     };
 
-    fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts/`, {
+    fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(inputsContact),

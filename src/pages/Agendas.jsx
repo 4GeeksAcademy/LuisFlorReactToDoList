@@ -23,18 +23,10 @@ export const Agendas = () => {
       {lista.map((item) => (
         <Col sm={6} lg={3} key={item.slug}>
           <Card style={{ width: "18rem", marginBottom: "1rem" }}>
-            <Card.Img
-              variant="top"
-              src="https://via.placeholder.com/150"
-              alt="Agenda"
-            />
             <Card.Body>
               <Card.Title>{item.slug}</Card.Title>
               <NavLink to={`/agendas/${item.slug}/contacts`}>
                 <Button variant="primary">More info</Button>
-              </NavLink>
-              <NavLink to={`/agendas/${item.slug}/addcontact`}>
-                <Button variant="primary">Add new contact</Button>
               </NavLink>
             </Card.Body>
           </Card>

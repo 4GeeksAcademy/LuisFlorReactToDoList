@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import { Card, Row, Col, Button } from "react-bootstrap";
+import { Row, Button, Col } from "react-bootstrap";
 import { useParams, NavLink } from "react-router";
+import { Contact } from "../components/Contact";
 
 export const ContactList = () => {
   const [lista, setLista] = useState([]);
   let { slug } = useParams();
-
-  const fetchContacts = (slug) =>
+  const fetchContacts = () =>
     fetch(`https://playground.4geeks.com/contact/agendas/${slug}/contacts`, {
       method: "GET",
     }).then((response) =>
@@ -16,27 +16,24 @@ export const ContactList = () => {
       }),
     );
   useEffect(() => {
-    fetchContacts(slug);
-  }, [slug]);
+    fetchContacts();
+  }, []);
 
   return (
     <>
       <h1 className="m-4">Contactos de {slug}</h1>
+      <NavLink to={`/agendas/${slug}/addcontact`}>
+        <Button variant="success">Add new contact</Button>
+      </NavLink>
       <Row>
         <ul>
           {lista.map((item) => (
             <Col sm={6} lg={3} className="m-4">
-              <Card key={item.id} style={{ marginBottom: "1rem" }}>
-                <Card.Body>
-                  <h1>{item.name}</h1>
-                  <p>Teléfono: {item.phone}</p>
-                  <p>Correo electrónico: {item.email}</p>
-                  <p>Dirección: {item.address}</p>
-                </Card.Body>
-                <NavLink to={`/agendas/${item.slug}/editcontact`}>
-                  <Button variant="primary">Edit contact</Button>
-                </NavLink>
-              </Card>
+              <Contact
+                contact={item}
+                slug={slug}
+                fetchContacts={fetchContacts}
+              />
             </Col>
           ))}
         </ul>
