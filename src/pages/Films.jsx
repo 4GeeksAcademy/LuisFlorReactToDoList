@@ -1,27 +1,18 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import { NavLink } from "react-router";
-import { FavouritesContext } from "./Favourites";
+import { FavouritesContext } from "./FavsContext";
 import { useContext } from "react";
+import { getFilms } from "../api/films";
 
 export const Films = () => {
   const [films, setFilms] = useState([]);
   const { favs, addFavs, deleteFavs, isFav } = useContext(FavouritesContext);
 
-  const fetchFilms = () => {
-    fetch("https://www.swapi.tech/api/films", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      //Si la promesa es fullfilled me hace el json que ees manejable y esos datos para utilizarlos le ponemos el nombre data
-      .then((data) => {
-        console.log(data.result);
-        setFilms(data.result);
-      });
-  };
-
   useEffect(() => {
-    fetchFilms();
+    getFilms().then((films) => {
+      setFilms(films);
+    });
   }, []);
 
   return (
@@ -33,12 +24,12 @@ export const Films = () => {
               <Card style={{ width: "18rem" }}>
                 <Card.Img variant="top" src="holder.js/100px180" />
                 <Card.Body>
-                  <Card.Title>{item.properties.title}</Card.Title>
+                  <Card.Title>{item.title}</Card.Title>
                   <Card.Text>
-                    Directer by el cabesa de kiko de{" "}
-                    <strong>{item.properties.director}</strong>
+                    Dirigido por el cabeza de chorlito de{" "}
+                    <strong>{item.director}</strong>
                   </Card.Text>
-                  <NavLink to={`/films/${item.uid}`}>
+                  <NavLink to={`/films/${item.id}`}>
                     <Button className="m-1" variant="primary">
                       More info
                     </Button>
@@ -47,12 +38,12 @@ export const Films = () => {
                     className="m-1"
                     variant="warning"
                     onClick={() => {
-                      isFav(item.uid, "film")
-                        ? deleteFavs(item.uid, "film")
-                        : addFavs(item.uid, "film", item.properties.title);
+                      isFav(item.id, "film", favs)
+                        ? deleteFavs(item.id, "film")
+                        : addFavs(item.id, "film", item.title);
                     }}
                   >
-                    {isFav(item.uid, "film") ? "Unfav" : "Fav"}
+                    {isFav(item.id, "film") ? "Unfav" : "Fav"}
                   </Button>
                 </Card.Body>
               </Card>

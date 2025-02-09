@@ -1,41 +1,26 @@
-//importar los input values correspondientes
+export const baseUrl =
+  "https://reimagined-waffle-pjpjpqgwwq7x27q4q-3000.app.github.dev/";
+export const usersUrl = "users/";
+export const peopleUrl = "people/";
+export const filmsUrl = "films/";
+export const vehiclesUrl = "vehicles/";
+export const spaceshipsUrl = "spaceships/";
+export const speciesUrl = "species/";
+export const planetsUrl = "planets/";
+export const favouritesUrl = "users/favs";
 
-export const dameAgendas = () => {
-  fetch("https://playground.4geeks.com/contact/agendas", {
-    method: "GET",
-  }).then((response) => {
-    return response.json();
-  });
-};
-
-export const dameUsuario = (usuario) => {
-  fetch(`https://playground.4geeks.com/contact/agendas/${usuario}`, {
-    method: "GET",
-  }).then((response) => {
-    return response.json();
-  });
-};
-
-export const deleteContacto = (id) => {
-  fetch(
-    `https://playground.4geeks.com/contact/agendas/LuisFlor7/contacts/${id}`,
-    {
-      method: "DELETE",
-    },
-  );
-};
-
-export const añadirContacto = (newName, newPhone, newMail, newAddress) => {
-  fetch("https://playground.4geeks.com/contact/agendas/LuisFlor7/contacts", {
-    method: "POST",
-    headers: {
-      "Content-type": "application/json",
-    },
-    body: JSON.stringify({
-      name: newName,
-      phone: newPhone,
-      email: newMail,
-      address: newAddress,
-    }),
-  });
+export const fetchWrapper = async (input, init) => {
+  return await fetch(input, init)
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      throw new Error(response.statusText || response.status);
+    })
+    .then((data) => {
+      return data;
+    })
+    .catch((error) => {
+      return error;
+    });
 };

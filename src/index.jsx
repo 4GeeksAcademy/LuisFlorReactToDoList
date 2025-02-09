@@ -4,7 +4,7 @@ import { BrowserRouter } from "react-router";
 
 import { App } from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { FavouritesProvider } from "./pages/Favourites";
+import { FavouritesProvider } from "./pages/FavsContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 // Hacemos una constante que incluya todos los paths de nuestros componentes para despues hacerle un map y que sea más dinámico
